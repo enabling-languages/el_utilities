@@ -2,17 +2,17 @@ from setuptools import setup
 
 setup(
     name='el_utilities',
-    version='0.1.0',
-    description='Utilities used in EL apps and services",
+    version='0.1.1',
+    description='Utilities used in EL apps and services',
     url='https://github.com/enabling-languages/el_utilities/',
     author='Andrew Cunningham',
     author_email='',
     license='MIT',
     packages=['el_utilities'],
     install_requires=[
-        'pyicu',
+        'el_internationalisation',
         'regex',
-        'unicodedataplus'
+        "pyicu"
     ],
     classifiers=[
         'Development Status :: 1 - Planning',
