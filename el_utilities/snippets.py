@@ -1,4 +1,4 @@
-def list_to_string(items: list, sep: str = ', ', drop_bool: bool = True) -> str:
+def list_to_string(items, sep = ', ', drop_bool = True):
     """Convert list to string
 
     Converts:
@@ -18,7 +18,7 @@ def list_to_string(items: list, sep: str = ', ', drop_bool: bool = True) -> str:
         return sep.join(f'{item}' for item in items)
     return sep.join(f'{item}' for item in items if item)
 
-def string_to_list(items: str, sep: str = ', ') -> list:
+def string_to_list(items, sep = ', '):
     """Convert string to list
 
     Converts:
@@ -36,7 +36,7 @@ def string_to_list(items: str, sep: str = ', ') -> list:
     # return [item.strip() for item in items.split(sep) if item.strip()]
     return [item for i in items.split(sep) if (item := i.strip())]
 
-def print_list(l: list, sep: str = "\n", drop_bool: bool = True) -> None:
+def print_list(l, sep = "\n", drop_bool = True):
     """Print list to STDOUT
 
     Print list to STDOUT, using specified separator between list items, defaulting 
@@ -53,7 +53,7 @@ def print_list(l: list, sep: str = "\n", drop_bool: bool = True) -> None:
 
 pl = print_list
 
-def search_dict_values(dictionary: dict, searchString: str) -> list:
+def search_dict_values(dictionary, searchString):
     """Retrieve dictionary keys for matching values
 
     Args:
@@ -65,7 +65,7 @@ def search_dict_values(dictionary: dict, searchString: str) -> list:
     """
     return [key for key,val in dictionary.items() if any(searchString in s for s in val)]
 
-def search_dict_keys(dictionary: dict, searchString: str) -> list:
+def search_dict_keys(dictionary, searchString):
     """Retrieve dictionary values for matching keys
 
     Args:

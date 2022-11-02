@@ -3,15 +3,14 @@ import regex as re
 from .transliteration_data import SUPPORTED_TRANSLITERATORS, TRANSLIT_DATA
 from icu import Collator, Locale
 from collections import OrderedDict
-from typing import Final
 
 # TODO:
 #  * add type hinting
 #  * add DocStrings
 
-DEFAULT_NF: Final[str] = "NFM"
+DEFAULT_NF = "NFM"
 
-def prep_string(s: str, dir: str, lang: str, b: str = "latin-only") -> str:
+def prep_string(s, dir, lang, b = "latin-only"):
     if dir.lower() == "reverse" and b.lower() != "both":
         s = s.lower()
     s = normalise(DEFAULT_NF, s)
@@ -19,7 +18,7 @@ def prep_string(s: str, dir: str, lang: str, b: str = "latin-only") -> str:
         s = s.replace("\u0327", "\u0328").replace("\u031C", "\u0328")
     return s
 
-def el_transliterate(bib_data: str, lang: str, dir: str = "forward", nf: str = DEFAULT_NF) -> str:
+def el_transliterate(bib_data, lang, dir = "forward", nf = DEFAULT_NF):
     lang = lang.replace("-", "_").split('_')[0]
     dir = dir.lower()
     if dir != "reverse":
