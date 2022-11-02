@@ -34,7 +34,7 @@ def string_to_list(items, sep = ', '):
         list: _description_
     """
     # return [item.strip() for item in items.split(sep) if item.strip()]
-    return [item for i in items.split(sep) if (item := i.strip())]
+    return [item for item in items.split(sep)  if item == item.strip() ]
 
 def print_list(l, sep = "\n", drop_bool = True):
     """Print list to STDOUT
