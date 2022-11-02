@@ -10,6 +10,8 @@ __credits__ = 'Enabling Languages'
 
 from .transliteration_data import *
 from .transliteration import *
+from .snippets import *
 
 del(transliteration_data)
 del(transliteration)
+del(snippets)
