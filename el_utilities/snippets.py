@@ -6,7 +6,7 @@ def list_to_string(items, sep = ', ', drop_bool = True):
     to:
        'one, two, three'
 
-    Args:   
+    Args:
         items (list): _description_
         sep (str, optional): _description_. Defaults to ', '.
 
