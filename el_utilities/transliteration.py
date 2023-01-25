@@ -30,37 +30,37 @@ def prep_string(s, dir, lang, bicameral = "latin-only", nf = DEFAULT_NF):
         s = s.replace("\u0327", "\u0328").replace("\u031C", "\u0328")
     return s
 
-# def el_transliterate(source, lang, dir = "forward", nf = DEFAULT_NF):
-#     lang = lang.replace("-", "_").split('_')[0]
-#     dir = dir.lower()
-#     if dir != "reverse":
-#         dir = "forward"
-#     if SUPPORTED_TRANSLITERATORS[lang]:
-#         translit_table = SUPPORTED_TRANSLITERATORS[lang]
-#         nf = nf.upper() if nf.upper() in ["NFC", "NFKC", "NFKC_CF", "NFD", "NFKD", "NFM"] else DEFAULT_NF
-#         source = prep_string(source, dir, lang, translit_table[1])
-#         if dir == "forward":
-#             collator = icu.Collator.createInstance(icu.Locale.getRoot())
-#         else:
-#             collator = icu.Collator.createInstance(icu.Locale(lang))
-#         if dir == "reverse" and lang in list(icu.Collator.getAvailableLocales().keys()):
-#             collator = icu.Collator.createInstance(icu.Locale(lang))
-#         else:
-#             collator = icu.Collator.createInstance(icu.Locale.getRoot())
-#         word_dict = collections.OrderedDict(sorted(TRANSLIT_DATA[translit_table[0]]['translit_dict'][dir].items(), reverse=True, key=lambda x: collator.getSortKey(x[0])))
-#         word_dict = {eli.normalise(DEFAULT_NF, k): eli.normalise(DEFAULT_NF, v) for k, v in word_dict.items()}
-#         label = translit_table[2]
-#         if dir == "reverse":
-#             source_split = regex.split('(\W+?)', source)
-#             res = "".join(word_dict.get(ele, ele) for ele in source_split)
-#         else:
-#             from functools import reduce
-#             res = reduce(lambda x, y: x.replace(y, word_dict[y]), word_dict, source)
-#     else:
-#         res = source
-#     if nf != DEFAULT_NF:
-#         res = eli.normalise(nf, res)
-#     return res
+def el_transliterate(source, lang, dir = "forward", nf = DEFAULT_NF):
+    lang = lang.replace("-", "_").split('_')[0]
+    dir = dir.lower()
+    if dir != "reverse":
+        dir = "forward"
+    if SUPPORTED_TRANSLITERATORS[lang]:
+        translit_table = SUPPORTED_TRANSLITERATORS[lang]
+        nf = nf.upper() if nf.upper() in ["NFC", "NFKC", "NFKC_CF", "NFD", "NFKD", "NFM"] else DEFAULT_NF
+        source = prep_string(source, dir, lang, translit_table[1])
+        if dir == "forward":
+            collator = icu.Collator.createInstance(icu.Locale.getRoot())
+        else:
+            collator = icu.Collator.createInstance(icu.Locale(lang))
+        if dir == "reverse" and lang in list(icu.Collator.getAvailableLocales().keys()):
+            collator = icu.Collator.createInstance(icu.Locale(lang))
+        else:
+            collator = icu.Collator.createInstance(icu.Locale.getRoot())
+        word_dict = collections.OrderedDict(sorted(TRANSLIT_DATA[translit_table[0]]['translit_dict'][dir].items(), reverse=True, key=lambda x: collator.getSortKey(x[0])))
+        word_dict = {eli.normalise(DEFAULT_NF, k): eli.normalise(DEFAULT_NF, v) for k, v in word_dict.items()}
+        label = translit_table[2]
+        if dir == "reverse":
+            source_split = regex.split('(\W+?)', source)
+            res = "".join(word_dict.get(ele, ele) for ele in source_split)
+        else:
+            from functools import reduce
+            res = reduce(lambda x, y: x.replace(y, word_dict[y]), word_dict, source)
+    else:
+        res = source
+    if nf != DEFAULT_NF:
+        res = eli.normalise(nf, res)
+    return res
 
 ###############################################
 #
