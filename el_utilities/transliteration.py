@@ -86,33 +86,7 @@ def translit_icu(source, transform):
     return transformer.transliterate(source)
 
 # READ transliteration rules from LDML file
-# def read_ldml_rules(ldml_file):
-#     """Read transliteration rules from LDML file
-
-#     Args:
-#         ldml_file (str): LDML file containing transformation rules.
-
-#     Returns:
-#         tuple[str, str]: Tuple containing rules and label.
-#     """
-#     import xml.etree.ElementTree as ET
-#     def get_ldml_rules(rules_file):
-#         rules = ''
-#         doc = ET.parse(rules_file)
-#         r = doc.find('./supplementalData/transforms/transform')
-#         if r is None:
-#             r = doc.find('./transforms/transform')
-#         if r is None:
-#             sys.stderr(f"Can't find transform in {rules_file}")
-#         pattern = regex.compile(r'[ \t]{2,}|[ ]*#.+\n')
-#         rules = regex.sub(pattern, '', r.find('./tRule').text)
-#         rules = regex.sub('\n', '', rules)
-#         rules_name = r.attrib['alias'].split()[0]
-#         return (rules, rules_name)
-#     rules_tuple = get_ldml_rules(ldml_file)
-#     return rules_tuple
-
-def read_ldml_rules(ldml_file: str) -> tuple[str, str]:
+def read_ldml_rules(ldml_file):
     """Read transliteration rules from LDML file
 
     Args:
@@ -133,11 +107,8 @@ def read_ldml_rules(ldml_file: str) -> tuple[str, str]:
         pattern = regex.compile(r'[ \t]{2,}|[ ]*#.+\n')
         rules = regex.sub(pattern, '', r.find('./tRule').text)
         rules = regex.sub('\n', '', rules)
-        reverse_name = ""
-        if r.attrib['direction'] == 'both':
-            reverse_name = r.attrib['backwardAlias'].split()[0]
-        forward_name = r.attrib['alias'].split()[0]
-        return (rules, forward_name, reverse_name)
+        rules_name = r.attrib['alias'].split()[0]
+        return (rules, rules_name)
     rules_tuple = get_ldml_rules(ldml_file)
     return rules_tuple
 
