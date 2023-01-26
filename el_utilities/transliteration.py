@@ -76,7 +76,7 @@ def available_transforms(term = None):
     return [x for x in available if term.lower() in x.lower()]
 
 # transliterate from inbuilt ICU transform
-def translit_icu(source: str | list[str], transform: str) -> str | list[str] | None:
+def translit_icu(source, transform):
     if transform not in available_transforms():
         print(f'Unsupported transformation. Not available in icu4c {icu.ICU_VERSION}')
         return
@@ -86,7 +86,7 @@ def translit_icu(source: str | list[str], transform: str) -> str | list[str] | N
     return transformer.transliterate(source)
 
 # READ transliteration rules from LDML file
-def read_ldml_rules(ldml_file: str) -> tuple[str, str]:
+def read_ldml_rules(ldml_file):
     """Read transliteration rules from LDML file
 
     Args:
@@ -119,7 +119,7 @@ def register_ldml(ldml_file, direction = icu.UTransDirection.FORWARD):
     icu.Transliterator.registerInstance(ldml_transformer)
 
 # transform from custom rules
-def translit_rules(source: str | list[str], rules:str, direction: int = icu.UTransDirection.FORWARD, name: str = "Custom") -> str | list[str]:
+def translit_rules(source, rules, direction = icu.UTransDirection.FORWARD, name = "Custom"):
     """Text transformation (transliteration) using custom rules or LDML files.
 
     Args:
@@ -137,7 +137,7 @@ def translit_rules(source: str | list[str], rules:str, direction: int = icu.UTra
     return transformer.transliterate(source)
 
 # Resolve LDML file path
-def set_ldml_file_path(raw_path: str) -> str:
+def set_ldml_file_path(raw_path):
     """Resolve LDML file path.
 
     Args:
@@ -185,7 +185,7 @@ def translit_dict(source, lang, dir = "forward", nf = DEFAULT_NF):
     dir = "forward" if dir.lower() != "reverse" else "reverse"
     if SUPPORTED_TRANSLITERATORS[lang]:
         translit_table = SUPPORTED_TRANSLITERATORS[lang]
-        nf = nf.upper() if nf.upper() in ["NFC", "NFKC", "NFKC_CF", "NFD", "NFKD", "NFM"] else DEFAULT_NF
+        nf = nf.upper() if nf.upper() in ["NFC", "NFKC", "NFKC_CF", "NFD", "NFKD", "NFM21"] else DEFAULT_NF
         # source = prep_string(source, dir, lang, translit_table[1])
         # if dir == "forward":
         #     collator = icu.Collator.createInstance(icu.Locale.getRoot())
