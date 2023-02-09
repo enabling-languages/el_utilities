@@ -7,12 +7,14 @@ import copy
 #  * add type hinting
 #  * add DocStrings
 
-DEFAULT_NF = "NFM"
+DEFAULT_NF = "NFM21"
 
-def toNFM(text, engine="ud"):
+def toNFM21(text, engine="ud"):
     if engine.lower() == "icu":
-        return eli.normalise("NFM", text)
-    return eli.normalise("NFM", text)
+        return eli.normalise("NFM21", text)
+    return eli.normalise("NFM21", text)
+
+toNFM = toNFM21
 
 def prep_string(s, dir, lang, bicameral = "latin-only", nf = DEFAULT_NF):
     # If both scripts are not bicameral, only lower case string if dirction
@@ -93,7 +95,7 @@ def read_ldml_rules(ldml_file):
         ldml_file (str): LDML file containing transformation rules.
 
     Returns:
-        tuple[str, str]: Tuple containing rules and label.
+        tuple[str, str, str]: Tuple containing rules and forward and reverse labels.
     """
     import xml.etree.ElementTree as ET
     def get_ldml_rules(rules_file):
@@ -106,17 +108,24 @@ def read_ldml_rules(ldml_file):
             sys.stderr(f"Can't find transform in {rules_file}")
         pattern = regex.compile(r'[ \t]{2,}|[ ]*#.+\n')
         rules = regex.sub(pattern, '', r.find('./tRule').text)
-        rules = regex.sub('\n', '', rules)
+        rules = regex.sub('[\n#]', '', rules)
         rules_name = r.attrib['alias'].split()[0]
-        return (rules, rules_name)
+        reverse_name = ''
+        # if r.attrib['backwardAlias']:
+        if 'backwardAlias' in r.attrib:
+            reverse_name = r.attrib['backwardAlias'].split()[0]
+        return (rules, rules_name, reverse_name)
     rules_tuple = get_ldml_rules(ldml_file)
     return rules_tuple
 
 # Register transformer form LDML file
-def register_ldml(ldml_file, direction = icu.UTransDirection.FORWARD):
+def register_ldml(ldml_file):
     ldml_rules = read_ldml_rules(ldml_file)
-    ldml_transformer = icu.Transliterator.createFromRules(ldml_rules[1], ldml_rules[0], direction)
+    ldml_transformer = icu.Transliterator.createFromRules(ldml_rules[1], ldml_rules[0], icu.UTransDirection.FORWARD)
     icu.Transliterator.registerInstance(ldml_transformer)
+    if ldml_rules[2]:
+        reverse_ldml_transformer = icu.Transliterator.createFromRules(ldml_rules[2], ldml_rules[0], icu.UTransDirection.REVERSE)
+        icu.Transliterator.registerInstance(reverse_ldml_transformer)
 
 # transform from custom rules
 def translit_rules(source, rules, direction = icu.UTransDirection.FORWARD, name = "Custom"):
